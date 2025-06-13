@@ -38,6 +38,7 @@ run:
   mixed_noise_alpha: 1 # 1
   mixed_precision_training: true
   enable_gradient_checkpointing: true
+  enable_xformers_memory_efficient_attention: true
   max_train_steps: 10000000
   max_train_epochs: -1
 
@@ -51,6 +52,8 @@ optimizer:
 model:
   act_fn: silu
   add_audio_layer: true
+  custom_audio_layer: false
+  audio_condition_method: cross_attn 
   attention_head_dim: 8
   block_out_channels: [320, 640, 1280, 1280]
   center_input_sample: false
@@ -81,8 +84,11 @@ model:
   out_channels: 4 # 16
   sample_size: 64
   resnet_time_scale_shift: default # Choose between [default, scale_shift]
+  unet_use_cross_frame_attention: false
+  unet_use_temporal_attention: false
+ 
 
-  use_motion_module: true
+  use_motion_module: false
   motion_module_resolutions: [1, 2, 4, 8]
   motion_module_mid_block: false
   motion_module_decoder_only: false
