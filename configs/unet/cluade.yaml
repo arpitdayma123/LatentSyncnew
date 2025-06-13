@@ -11,7 +11,7 @@ data:
   batch_size: 1 # Start with 1, increase if memory allows
   num_workers: 12
   num_frames: 16
-  resolution: 384 # Compromise between 256 and 512 for quality vs speed
+  resolution: 512 # Compromise between 256 and 512 for quality vs speed
   mask_image_path: latentsync/utils/mask.png
   audio_sample_rate: 16000
   video_fps: 25
@@ -29,7 +29,7 @@ run:
   recon_loss_weight: 1
   guidance_scale: 1.5 # Balanced between 1.0 and 2.0
   trepa_loss_weight: 10
-  inference_steps: 25 # Slightly more steps for quality
+  inference_steps: 20 # Slightly more steps for quality
   trainable_modules:
     - motion_modules.
     - attentions.
@@ -89,7 +89,7 @@ model:
 
   # Use lightweight motion modules for sync without too much overhead
   use_motion_module: true
-  motion_module_resolutions: [2, 4, 8] # Reduce from [1,2,4,8] to save memory
+  motion_module_resolutions: [1, 2, 4, 8] # Reduce from [1,2,4,8] to save memory
   motion_module_mid_block: false
   motion_module_decoder_only: false
   motion_module_type: Vanilla
