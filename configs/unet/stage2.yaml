@@ -88,7 +88,7 @@ model:
   unet_use_temporal_attention: false
  
 
-  use_motion_module: false
+  use_motion_module: true
   motion_module_resolutions: [1, 2, 4, 8]
   motion_module_mid_block: false
   motion_module_decoder_only: false
