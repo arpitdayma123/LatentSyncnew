@@ -1,5 +1,5 @@
 data:
-  syncnet_config_path: configs/syncnet/syncnet_16_pixel_attn.yaml
+  syncnet_config_path: configs/syncnet/syncnet_16_pixel.yaml
   train_output_dir: debug/unet
   train_fileslist: /mnt/bn/maliva-gen-ai-v2/chunyu.li/fileslist/data_v10_core.txt
   train_data_dir: ""
