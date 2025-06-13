@@ -1,0 +1,54 @@
+# Hybrid config combining best of both worlds
+data:
+  syncnet_config_path: configs/syncnet/syncnet_16_pixel_attn.yaml  # from stage2
+  train_output_dir: debug/unet
+  train_fileslist: /mnt/bn/maliva-gen-ai-v2/chunyu.li/fileslist/data_v10_core.txt  # from stage2 (higher quality dataset)
+  resolution: 512  # keep high resolution from stage2
+  batch_size: 1  # from stage2 (higher quality)
+  num_workers: 12  # from stage2
+  # keep other data parameters from stage2
+
+ckpt:
+  resume_ckpt_path: checkpoints/latentsync_unet.pt
+  save_ckpt_steps: 5000  # from replicate (more frequent saves)
+
+run:
+  pixel_space_supervise: true
+  use_syncnet: true
+  sync_loss_weight: 0.1  # increased from both to emphasize lip sync
+  perceptual_loss_weight: 0.1
+  recon_loss_weight: 1
+  guidance_scale: 1.5  # midpoint between both
+  trepa_loss_weight: 10
+  inference_steps: 20
+  seed: 1247
+  use_mixed_noise: true
+  mixed_noise_alpha: 1
+  mixed_precision_training: true
+  enable_gradient_checkpointing: true  # from stage2 (better quality)
+  enable_xformers_memory_efficient_attention: true  # from replicate (efficiency)
+  max_train_steps: 10000000
+
+model:
+  # Use most model parameters from stage2 but with these changes:
+  use_motion_module: true  # enable but with replicate's temporal settings
+  motion_module_resolutions: [1, 2, 4, 8]
+  motion_module_mid_block: false
+  motion_module_decoder_only: false
+  motion_module_type: Vanilla
+  motion_module_kwargs:
+    num_attention_heads: 8
+    num_transformer_block: 1
+    attention_block_types:
+      - Temporal_Self
+      - Temporal_Self
+    temporal_position_encoding: true
+    temporal_position_encoding_max_len: 16  # from replicate (shorter than stage2)
+    temporal_attention_dim_div: 1
+    zero_initialize: true
+  
+  # Add audio conditioning from replicate
+  custom_audio_layer: false
+  audio_condition_method: cross_attn
+  unet_use_cross_frame_attention: false
+  unet_use_temporal_attention: false
